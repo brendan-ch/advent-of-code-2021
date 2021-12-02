@@ -1,0 +1,2 @@
+# Project setup
+Create a `inputFiles` directory in the root folder of the project. Label input files with `day` followed by the day number and the `.txt` extension. (e.g. `day1.txt`, `day2.txt`, and so on).
