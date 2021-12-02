@@ -1,6 +1,6 @@
 import time
 
-def getMeasurementWindowSums(measurements: list):
+def getMeasurementWindowSums(measurements: "list[int]"):
   sums = []
 
   for i in range(len(measurements) - 2):
@@ -8,7 +8,7 @@ def getMeasurementWindowSums(measurements: list):
 
   return sums
 
-def countMeasurements(measurements: list):
+def countMeasurements(measurements: "list[int]"):
   count = 0
 
   for i in range(1, len(measurements)):
