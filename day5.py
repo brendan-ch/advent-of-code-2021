@@ -12,6 +12,7 @@ class Point:
     return "."
 
   def addOverlap(self):
+    """Add an overlap to the point."""
     self.overlaps += 1
 
 class Graph:
@@ -48,10 +49,11 @@ class Graph:
     return count
 
   def addOverlapToPoint(self, x: int, y: int):
+    """Add an overlap to a point."""
     self.getPoint(x, y).addOverlap()
 
   def addLine(self, x1: int, y1: int, x2: int, y2: int, diagonals = False):
-    """Add a horizontal or vertical line."""
+    """Add a horizontal, vertical, or diagonal line."""
 
     if (x1 == x2):
       step = 1
@@ -83,10 +85,6 @@ class Graph:
         # 315 degrees
         deg = (1, 1)
 
-      # for x in range(x1, x2 + deg[0], deg[0]):
-      #   for y in range(y1, y2 + deg[1], deg[1]):
-      #     self.addOverlapToPoint(x, y)
-
       xTemp = x1 - deg[0]
       yTemp = y1 - deg[1]
 
@@ -97,7 +95,7 @@ class Graph:
         self.addOverlapToPoint(xTemp, yTemp)
 
 def createLines(inputList: "list[str]"):
-  """Return a list of tuples that contain lines."""
+  """Return a list of tuples that contain information about lines."""
 
   lines: "list[tuple[list[int]]]" = []
 
