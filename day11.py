@@ -11,16 +11,6 @@ def checkIfSynchronized(octopusMap: "list[list[int]]"):
 
   return True
 
-def checkIfGreaterThanNine(octopusMap: "list[list[int]]"):
-  """Returns true if there is a value greater than 9."""
-
-  for row in octopusMap:
-    for octopus in row:
-      if (octopus > 9):
-        return True
-
-  return False
-
 def simulateStep(octopusMap: "list[list[int]]"):
   """Simulate a step *in place* and return the number of flashes after the step."""
 
