@@ -40,25 +40,34 @@ def navigateToNextPart2(currentPoint: Point, path: "list[Point]", allPaths: "lis
   """Navigate to the next point, using the updated set of rules."""
 
   path.append(currentPoint)
-  if (currentPoint.id == "end"):
-    uniquePoints = []
-    for point in path:
-      if (uniquePoints.count(point) == 0):
-        uniquePoints.append(point)
+  # Count unique points in path
+  uniquePoints = []
+  for point in path:
+    if (uniquePoints.count(point) == 0):
+      uniquePoints.append(point)
 
-    countsOfSmallCaves = [path.count(point) for point in uniquePoints if point.isSmallCave]
+  countsOfSmallCaves = [path.count(point) for point in uniquePoints if point.isSmallCave]
+  
+  if (currentPoint.id == "end"):
     if (countsOfSmallCaves.count(2) > 1):
       return
 
     allPaths.append(path)
     return
 
-  countsOfSmallCaves = [path.count(point) for point in currentPoint.pointers if point.isSmallCave]
-
   allowTraverseToSmallCave = countsOfSmallCaves.count(2) == 0
   for point in currentPoint.pointers:
 
-    if (point.id != "start" and (not point.isSmallCave or (point.isSmallCave and ((path.count(point) == 1 and allowTraverseToSmallCave) or path.count(point) == 0)))):
+    if (
+      point.id != "start" 
+      and (
+        not point.isSmallCave 
+        or (
+          point.isSmallCave
+          and ((path.count(point) == 1 and allowTraverseToSmallCave) or path.count(point) == 0)
+        )
+      )
+    ):
       navigateToNextPart2(point, path.copy(), allPaths)
 
 def navigateToNext(currentPoint: Point, path: "list[Point]", allPaths: "list[list[Point]]"):
@@ -79,7 +88,7 @@ def navigateToNext(currentPoint: Point, path: "list[Point]", allPaths: "list[lis
 
     # Append list to allPaths when done recursing
 
-    if (point.id != "start" and ((point.id.upper() == point.id) or (point.id.upper() != point.id and path.count(point) == 0))):
+    if (point.id != "start" and ((not point.isSmallCave) or (point.isSmallCave and path.count(point) == 0))):
       navigateToNext(point, path.copy(), allPaths)
 
 if (__name__ == "__main__"):
