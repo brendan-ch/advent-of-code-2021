@@ -86,7 +86,7 @@ def navigateToNext(currentPoint: Point, path: "list[Point]", allPaths: "list[lis
       navigateToNext(point, path.copy(), allPaths)
 
 if (__name__ == "__main__"):
-  startTime = time.time()
+  startTime = time.perf_counter()
 
   with open('inputFiles/day12.txt', 'r') as inputFile:
     inputFromFile = inputFile.read()
@@ -105,4 +105,4 @@ if (__name__ == "__main__"):
 
   print(f"Number of paths for part 2: {len(allPaths)}")
 
-  print("--- %s seconds ---" % (time.time() - startTime))
+  print("--- %s seconds ---" % (time.perf_counter() - startTime))

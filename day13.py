@@ -53,7 +53,7 @@ class Paper:
         self.points.remove(point)
 
 if (__name__ == "__main__"):
-  startTime = time.time()
+  startTime = time.perf_counter()
 
   with open('inputFiles/day13.txt', 'r') as inputFile:
     inputFromFile = inputFile.read()
@@ -84,4 +84,4 @@ if (__name__ == "__main__"):
   print("Code formed by points:")
   print(paper.pointsAsString())
 
-  print("--- %s seconds ---" % (time.time() - startTime))
+  print("--- %s seconds ---" % (time.perf_counter() - startTime))
