@@ -1,28 +1,25 @@
 import time
 import copy
 
-def getLetterCounts(initialStr: str):
-  uniqueLetters = set(initialStr)
-  
-  letterCounts = [initialStr.count(letter) for letter in uniqueLetters]
+def getLetterCounts(stringInfo: "dict[str, dict[str, any]]"):
+  # Get unique letters
+  allLetters = ""
+  for key in stringInfo:
+    allLetters += key
 
-  return max(letterCounts) - min(letterCounts)
+  uniqueLetters = set(allLetters)
+  letterCounter = {}
+  for letter in uniqueLetters:
+    letterCounter[letter] = 0
 
-def insertPairs(initialStr: str, pairData: "dict"):
-  """Return a new string with the given pair data (inefficient)"""
-  
-  newStr = initialStr
+  for key in stringInfo:
+    letterCounter[key[:1]] += stringInfo[key]["numCount"]
+    letterCounter[key[1:]] += stringInfo[key]["numCount"]
 
-  i = 0
-  while i < len(newStr):
-    if (newStr[i:i + 2]) in pairData:
-      newStr = newStr[:i + 1] + pairData[newStr[i:i + 2]] + newStr[i + 1:]
+  for key in letterCounter:
+    letterCounter[key] = int(letterCounter[key] / 2 + 0.5)
 
-      i += 1
-
-    i += 1
-
-  return newStr
+  return max(letterCounter.values()) - min(letterCounter.values())
 
 def insertPairsEfficient(stringInfo: "dict[str, dict[str, any]]"):
   """Return a new stringInfo dictionary with the inserted pairs."""
@@ -49,9 +46,7 @@ def constructStringInfo(initialStr: str, pairData: "dict"):
       "charToInsert": pairData[key],
     }
 
-  # string.count method is unreliable for this purpose
-  # Loop through string manually
-
+  # Loop through initial string
   for i in range(len(initialStr) - 1):
     if (initialStr[i:i + 2]) in stringInfo:
       stringInfo[initialStr[i:i + 2]]["numCount"] += 1
@@ -65,44 +60,22 @@ if (__name__ == "__main__"):
     inputFromFile = inputFile.read()
 
   inputData: "list[str]" = [x for x in inputFromFile.split("\n") if x]
-
-  initialStr = inputData[0]
-
   pairData = {}
-
   for x in inputData[1:]:
     split = x.split(" -> ")
 
     pairData[split[0]] = split[1]
-    
-  for i in range(10):
-    initialStr = insertPairs(initialStr, pairData)
-
-  print(f"Difference between most common and least common (after 10): {getLetterCounts(initialStr)}")
 
   initialStr = inputData[0]
   stringInfo = constructStringInfo(initialStr, pairData)
+  for i in range(10):
+    stringInfo = insertPairsEfficient(stringInfo)
 
+  print(f"Difference between most common and least common (after 10): {getLetterCounts(stringInfo)}")
+
+  stringInfo = constructStringInfo(initialStr, pairData)
   for i in range(40):
     stringInfo = insertPairsEfficient(stringInfo)
 
-  # Get unique letters
-  allLetters = ""
-  for key in pairData:
-    allLetters += key
-
-  uniqueLetters = set(allLetters)
-  letterCounter = {}
-  for letter in uniqueLetters:
-    letterCounter[letter] = 0
-
-  for key in stringInfo:
-    letterCounter[key[:1]] += stringInfo[key]["numCount"]
-    letterCounter[key[1:]] += stringInfo[key]["numCount"]
-
-  for key in letterCounter:
-    letterCounter[key] = int(letterCounter[key] / 2 + 0.5)
-
-  print(f"Difference between most common and least common (after 40): {max(letterCounter.values()) - min(letterCounter.values())}")
-
+  print(f"Difference between most common and least common (after 40): {getLetterCounts(stringInfo)}")
   print("--- %s seconds ---" % (time.perf_counter() - startTime))
