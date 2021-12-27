@@ -159,9 +159,6 @@ if (__name__ == "__main__"):
   countOfEasyDigits = countEasyDigits(inputList)
   print(f"Times where 1, 4, 7, and 8 appear: {countOfEasyDigits}")
 
-  for line in inputList:
-    getMap(line)
-
   resultSum = getSumOfOutputValues(inputList)
   print(f"Sum of all output values: {resultSum}")
 
