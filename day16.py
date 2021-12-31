@@ -28,20 +28,20 @@ def convertToBin(hexValue: str):
 
   return binValue
 
-def sumVersionNumbers(binary: str, startIndex: int):
+def sumVersionNumbers(binary: str):
   """Decode the given packet and return the version number sum."""
   if (len(binary) <= 7):
     # Invalid packet
     return (0, len(binary))
 
   # Check version number and packet type ID
-  version = int(binary[startIndex:3 + startIndex], 2)
-  literalValue = binary[3 + startIndex:6 + startIndex] == '100'
-  endIndex = startIndex
+  version = int(binary[:3], 2)
+  literalValue = binary[3:6] == '100'
+  endIndex = 0
 
   if (literalValue):
     tempStr = '';
-    parseStart = 6 + startIndex
+    parseStart = 6
     # Parse groups until end group reached
     while (tempStr != '0'):
       tempStr = binary[parseStart]
@@ -50,27 +50,27 @@ def sumVersionNumbers(binary: str, startIndex: int):
     endIndex = parseStart
 
   else:
-    ltId = binary[6 + startIndex]
+    ltId = binary[6]
     if (ltId == '0'):
       # Check next 15 bits for packet length
-      packetLength = int(binary[7 + startIndex:22 + startIndex], 2)
-      nextStr = binary[22 + startIndex:22 + startIndex + packetLength]
+      packetLength = int(binary[7:22], 2)
+      nextStr = binary[22:22 + packetLength]
       endIndex = 22
 
       while (len(nextStr) > 0):
-        result = sumVersionNumbers(nextStr, 0)
+        result = sumVersionNumbers(nextStr)
         version += result[0]
         endIndex += len(nextStr) - len(nextStr[result[1]:])
         nextStr = nextStr[result[1]:]
 
     elif (ltId == '1'):
       # Check next 11 bits for # of subpackets
-      numPackets = int(binary[7 + startIndex:18 + startIndex], 2)
+      numPackets = int(binary[7:18], 2)
       tempStartIndex = 0
       endIndex = 18
 
       for i in range(numPackets):
-        result = sumVersionNumbers(binary[18 + startIndex + tempStartIndex:], 0)
+        result = sumVersionNumbers(binary[18 + tempStartIndex:])
         version += result[0]
         tempStartIndex += result[1]
 
@@ -86,6 +86,6 @@ if (__name__ == "__main__"):
 
   binary = convertToBin(inputFromFile)
 
-  print(f'Sum of version numbers: {sumVersionNumbers(binary, 0)[0]}')
+  print(f'Sum of version numbers: {sumVersionNumbers(binary)[0]}')
 
   print("--- %s seconds ---" % (time.perf_counter() - startTime))
